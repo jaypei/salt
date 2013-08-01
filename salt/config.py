@@ -681,6 +681,19 @@ def get_id(root_dir=None):
     log.debug('Guessing ID. The id can be explicitly in set {0}'
               .format(os.path.join(syspaths.CONFIG_DIR, 'minion')))
 
+    try:
+        with open('/etc/sysconfig/network') as f:
+            line = f.readline()
+            while line:
+                line = line.strip()
+                if line.startswith('HOSTNAME=') and len(line) > 9:
+                    result = line[9:]
+                    result = result.strip("\"'")
+                    return result, False
+                line = f.readline()
+    except Exception:
+        pass
+
     # Check socket.getfqdn()
     fqdn = socket.getfqdn()
     if fqdn != 'localhost':
