@@ -569,6 +569,18 @@ def get_id():
 
     log.debug('Guessing ID. The id can be explicitly in set {0}'
               .format('/etc/salt/minion'))
+
+    try:
+        with open('/etc/sysconfig/network') as f:
+            line = f.readline()
+            while line:
+                line = line.strip()
+                if line.startswith('HOSTNAME=') and len(line) > 9:
+                    return line[9:], False
+                line = f.readline()
+    except Exception:
+        pass
+
     fqdn = socket.getfqdn()
     if 'localhost' != fqdn:
         log.info('Found minion id from getfqdn(): {0}'.format(fqdn))
