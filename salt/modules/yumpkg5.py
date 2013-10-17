@@ -52,8 +52,15 @@ def __virtual__():
             valid = True
     else:
         # RHEL <= 5 and all variants need to use this module
-        if os_family == 'RedHat' and os_major_version <= 5:
+        #if os_family == 'RedHat' and os_major_version <= 5:
+        #    valid = True
+
+        # HACK:
+        #       this code is very useful when python is not system
+        #       version in your OS
+        if os_family == 'RedHat' and os_major_version <= 6:
             valid = True
+
     if valid:
         global mod_repo, _parse_repo_file, list_repos, get_repo
         global expand_repo_def, del_repo
