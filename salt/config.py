@@ -576,7 +576,9 @@ def get_id():
             while line:
                 line = line.strip()
                 if line.startswith('HOSTNAME=') and len(line) > 9:
-                    return line[9:], False
+                    result = line[9:]
+                    result = result.strip("\"'")
+                    return result, False
                 line = f.readline()
     except Exception:
         pass
